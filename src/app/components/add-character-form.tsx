@@ -7,6 +7,7 @@ export const AddCharacterForm = () => {
 	const id = useId()
 	const [error, setError] = useState(false)
 	const [inputValue, setInputValue] = useState("")
+	const [isDisabled, setIsDisabled] = useState(false)
 
 	useEffect(() => {
 		setError(false)
@@ -18,6 +19,7 @@ export const AddCharacterForm = () => {
 			action={async (formData: FormData) => {
 				const name = formData.get("name") as string | null
 				if (name) {
+					setIsDisabled(true)
 					const result = await createCharacter(name)
 
 					if (result.error) {
@@ -29,6 +31,7 @@ export const AddCharacterForm = () => {
 						setInputValue("")
 						CustomToast(result.success, "success")
 					}
+					setIsDisabled(false)
 				}
 			}}
 		>
@@ -47,6 +50,7 @@ export const AddCharacterForm = () => {
 					/>
 					<button
 						className="border rounded-e-lg px-2 hover:bg-slate-100/10"
+						disabled={isDisabled}
 					>
 						Add
 					</button>

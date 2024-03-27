@@ -1,29 +1,49 @@
 'use client'
 
-import { softDeleteCharacter } from "@/app/actions"
+import { restoreCharacter } from "@/app/actions"
 import { CustomToast } from "@/app/custom-toast"
+import { useTransition } from "react"
 import { FaRecycle } from "react-icons/fa"
+import { ClipLoader } from "react-spinners"
 
 interface RestoreCharacterFormProps {
-	characterId: string
+	character: { id: string; name: string; deleted: boolean; }
 }
 
 export const RestoreCharacterForm = ({
-	characterId
+	character
 }: RestoreCharacterFormProps) => {
+	const [isPending, startTransition] = useTransition()
+
+	const handleSubmit = async () => {
+		const result = await restoreCharacter(character.id)
+		if (result?.success) {
+			CustomToast(`Character "${character.name}" restored to roster.`, "success")
+		}
+	}
+
 	return (
-		<form
-			className="flex"
-			action={async () => {
-				const result = await softDeleteCharacter(characterId)
-				if (result?.success) {
-					CustomToast("Character restored to roster.", "success")
-				}
+		<button
+			type="button"
+			onClick={() => {
+				if (isPending) return
+				startTransition(() => {
+					handleSubmit()
+				})
 			}}
+			disabled={isPending}
+			className="text-green-400 disabled:text-green-400/10 text-2xl"
 		>
-			<button>
-				<FaRecycle className="text-green-400 text-2xl" />
-			</button>
-		</form>
+			{
+				isPending
+				? <ClipLoader
+					loading={true}
+					color="#fff"
+					size={16}
+					aria-label="Loading Character Restoration"
+				/>
+				: <FaRecycle aria-label="Restore Character" />
+			}
+		</button>
 	)
 }

@@ -52,6 +52,28 @@ export const softDeleteCharacter = async (id: string) => {
 	}
 }
 
+export const restoreCharacter = async (id: string) => {
+	try {
+		const result = await prisma.character.update({
+			where: {id},
+			data: { deleted: false }
+		})
+		console.log(result)
+		revalidatePath("page")
+		return {
+			success: "Character restored."
+		}
+	} catch (error) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			if (error.code === "P2025") {
+				return {
+					error: "Character Not Found!"
+				}
+			}
+		}
+	}
+}
+
 export const deleteCharacter = async (id:string) => {
 	try {
 		const result = await prisma.character.delete({

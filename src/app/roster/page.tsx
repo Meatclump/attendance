@@ -1,21 +1,57 @@
-import { AddCharacterForm } from "@/app/components/add-character-form"
-import { RosterTable } from "@/app/components/roster-table"
+import Link from "next/link"
+import { AddCharacterForm } from "../components/add-character-form"
+import { RosterTable } from "../components/roster-table"
+import { Suspense } from "react"
 
-const RosterPage = () => {
+interface RosterPageProps {
+	searchParams: { [key: string]: string | string[] | undefined }
+}
+
+const RosterPage = ({
+	searchParams
+}: RosterPageProps) => {
+	const params = searchParams
+	const showInactive = params.tab === "inactive"
+	console.log(params)
 	return (
-		<div className="flex flex-1 p-4 gap-4 overflow-y-scroll">
-			<div className="rounded-xl bg-slate-100/10 border border-slate-100/20 flex flex-col">
-				<h2 className="p-4">
+		<>
+			<div className="flex items-center gap-4 p-4">
+				<h2 className="flex-1">
 					Character Roster
 				</h2>
-				<div className="max-w-[500px] flex-1 border-t border-t-slate-100/20 pt-4 overflow-y-scroll">
-					<RosterTable />
-				</div>
-				<div className="p-4 border-t border-t-slate-100/20">
-					<AddCharacterForm />
+				<div className="flex gap-4 justify-end">
+					<Link
+						className={`${!showInactive && "bg-slate-100 text-slate-900"} border rounded-lg px-2 py-1`}
+						href="?tab=active"
+					>
+						Active
+					</Link>
+					<Link
+						className={`${showInactive && "bg-slate-100 text-slate-900"} border rounded-lg px-2 py-1`}
+						href="?tab=inactive"
+					>
+						Inactive
+					</Link>
 				</div>
 			</div>
-		</div>
+			<div className="max-w-[500px] flex-1 border-t border-t-slate-100/20 pt-4 overflow-y-scroll">
+				{
+					showInactive
+					? (
+						<Suspense fallback="Loading...">
+							<RosterTable inactive={showInactive} />
+						</Suspense>
+					) : (
+						<Suspense fallback="Loading...">
+							<RosterTable inactive={showInactive} />
+						</Suspense>
+					)
+				}
+			</div>
+			<div className="p-4 border-t border-t-slate-100/20">
+				<AddCharacterForm />
+			</div>
+		</>
 	)
 }
 

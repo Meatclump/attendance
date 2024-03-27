@@ -1,15 +1,34 @@
-import { getRoster } from "@/app/actions"
+import { getInactiveRoster, getRoster } from "@/app/actions"
 import { DeleteCharacterForm } from "./delete-character-form"
 
-export const RosterTable = async () => {
-	const roster = await getRoster()
+interface RosterTableProps {
+	inactive: boolean
+}
+
+export const RosterTable = async ({
+	inactive
+}: RosterTableProps) => {
+	const roster = inactive
+		? await getInactiveRoster()
+		: await getRoster()
+
 	return (
 		<table className="table-fixed w-full">
 			<thead>
 				<tr>
-					<th className="px-4 text-start w-[200px]">Character</th>
-					<th className="px-4 text-start">Participates In</th>
-					<th className="px-4 text-center w-[80px]">Delete</th>
+					<th className="px-4 text-start w-[200px]">
+						Character
+					</th>
+					<th className="px-4 text-start">
+						Participates In
+					</th>
+					<th className="px-4 text-center w-[150px]">
+						{
+							inactive
+							? (<>Reactivate</>)
+							: (<>Remove</>)
+						}
+					</th>
 				</tr>
 			</thead>
 			<tbody>

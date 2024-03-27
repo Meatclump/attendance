@@ -9,10 +9,46 @@ import { revalidatePath } from "next/cache"
  */
 export const getRoster = async () => {
 	try {
-		const roster = await prisma.character.findMany()
+		const roster = await prisma.character.findMany({
+			where: {deleted: false}
+		})
 		return roster
 	} catch (error) {
 		return null
+	}
+}
+
+export const getInactiveRoster = async () => {
+	try {
+		const roster = await prisma.character.findMany({
+			where: {deleted: true}
+		})
+		console.log("ROSTER:",roster)
+		return roster
+	} catch (error) {
+		return null
+	}
+}
+
+export const softDeleteCharacter = async (id: string) => {
+	try {
+		const result = await prisma.character.update({
+			where: {id},
+			data: { deleted: true }
+		})
+		console.log(result)
+		revalidatePath("page")
+		return {
+			success: "Character soft deleted."
+		}
+	} catch (error) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			if (error.code === "P2025") {
+				return {
+					error: "Character Not Found!"
+				}
+			}
+		}
 	}
 }
 
@@ -60,9 +96,22 @@ export const getCharacter = async (id:string) => {
  * Create a new roster character in the database
  */
 export const createCharacter = async (name:string) => {
+	let validatedName = name.trim()
+
+	if (validatedName.length < 2) {
+		return {
+			error: "Character name must be at least 2 characters."
+		}
+	}
+
+	validatedName = validatedName[0].toUpperCase() + validatedName.slice(1)
+	
 	try {
 		const createChar = await prisma.character.create({
-			data: { name }
+			data: {
+				name: validatedName,
+				deleted: false
+			}
 		})
 		revalidatePath("page")
 		return {
@@ -72,7 +121,7 @@ export const createCharacter = async (name:string) => {
 		if (error instanceof Prisma.PrismaClientKnownRequestError) {
 			if (error.code === 'P2002') {
 				revalidatePath("page")
-				return { error: "Name must be unique." }
+				return { error: "Character name must be unique. If no such Character is in the roster, check the Inactive list." }
 			}
 		}
 		revalidatePath("page")

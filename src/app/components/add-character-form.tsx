@@ -1,13 +1,12 @@
 'use client'
 import { createCharacter } from "@/app/actions"
 import { createRef, useEffect, useId, useState } from "react"
-import { CustomToast } from "./custom-toast"
+import { CustomToast } from "@/app/custom-toast"
 
 export const AddCharacterForm = () => {
 	const id = useId()
 	const [error, setError] = useState(false)
 	const [inputValue, setInputValue] = useState("")
-	const formRef = createRef<HTMLFormElement>()
 
 	useEffect(() => {
 		setError(false)
@@ -15,7 +14,6 @@ export const AddCharacterForm = () => {
 
 	return (
 		<form
-			ref={formRef}
 			className="flex flex-col gap-4"
 			action={async (formData: FormData) => {
 				const name = formData.get("name") as string | null
@@ -28,8 +26,8 @@ export const AddCharacterForm = () => {
 					}
 					if (result.success) {
 						setError(false)
+						setInputValue("")
 						CustomToast(result.success, "success")
-						formRef.current?.reset()
 					}
 				}
 			}}

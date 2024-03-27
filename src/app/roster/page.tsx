@@ -2,6 +2,7 @@ import Link from "next/link"
 import { AddCharacterForm } from "../components/add-character-form"
 import { RosterTable } from "../components/roster-table"
 import { Suspense } from "react"
+import { Spinner } from "../components/spinner"
 
 interface RosterPageProps {
 	searchParams: { [key: string]: string | string[] | undefined }
@@ -15,7 +16,7 @@ const RosterPage = ({
 	console.log(params)
 	return (
 		<>
-			<div className="flex items-center gap-4 p-4">
+			<div className="flex items-center gap-4 p-4 w-[500px]">
 				<h2 className="flex-1">
 					Character Roster
 				</h2>
@@ -37,15 +38,15 @@ const RosterPage = ({
 			<div className="max-w-[500px] flex-1 border-t border-t-slate-100/20 pt-4 overflow-y-scroll">
 				{
 					showInactive
-					? (
-						<Suspense fallback="Loading...">
-							<RosterTable inactive={showInactive} />
-						</Suspense>
-					) : (
-						<Suspense fallback="Loading...">
-							<RosterTable inactive={showInactive} />
-						</Suspense>
-					)
+						? (
+							<Suspense fallback="Loading...">
+								<RosterTable inactive={showInactive} />
+							</Suspense>
+						) : (
+							<Suspense fallback="Loading...">
+								<RosterTable inactive={showInactive} />
+							</Suspense>
+						)
 				}
 			</div>
 			<div className="p-4 border-t border-t-slate-100/20">

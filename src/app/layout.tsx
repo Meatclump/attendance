@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Header } from "@/app/components/header";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +21,10 @@ export default function RootLayout({
 		<ClerkProvider>
 			<html lang="en">
 				<body className={inter.className}>
-					<main className="flex flex-col min-h-screen w-full dark:bg-zinc-900 dark:text-zinc-100">
+					<main className="flex flex-col h-screen w-full dark:bg-zinc-900 dark:text-zinc-100">
 						<Header />
 						{children}
+						<Toaster />
 					</main>
 				</body>
 			</html>

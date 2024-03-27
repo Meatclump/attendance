@@ -4,13 +4,13 @@ import { softDeleteCharacter } from "@/app/actions"
 import { CustomToast } from "@/app/custom-toast"
 import { FaRecycle } from "react-icons/fa"
 
-interface ReactivateCharacterFormProps {
+interface RestoreCharacterFormProps {
 	characterId: string
 }
 
-export const ReactivateCharacterForm = ({
+export const RestoreCharacterForm = ({
 	characterId
-}: ReactivateCharacterFormProps) => {
+}: RestoreCharacterFormProps) => {
 	return (
 		<form
 			className="flex"

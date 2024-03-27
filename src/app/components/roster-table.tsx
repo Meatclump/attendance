@@ -1,6 +1,6 @@
 import { getInactiveRoster, getRoster } from "@/app/actions"
 import { DeleteCharacterForm } from "@/app/components/delete-character-form"
-import { ReactivateCharacterForm } from "@/app/components/reactivate-character-form"
+import { RestoreCharacterForm } from "@/app/components/restore-character-form"
 
 interface RosterTableProps {
 	inactive: boolean
@@ -51,7 +51,7 @@ export const RosterTable = async ({
 								<div className="flex items-center justify-center">
 									{
 										inactive
-										? <ReactivateCharacterForm characterId={character.id} />
+										? <RestoreCharacterForm characterId={character.id} />
 										: <DeleteCharacterForm characterId={character.id} />
 									}
 								</div>

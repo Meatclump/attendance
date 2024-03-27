@@ -4,7 +4,7 @@ import { restoreCharacter } from "@/app/actions"
 import { CustomToast } from "@/app/custom-toast"
 import { useTransition } from "react"
 import { FaRecycle } from "react-icons/fa"
-import { ClipLoader } from "react-spinners"
+import { Spinner } from "@/app/components/spinner"
 
 interface RestoreCharacterFormProps {
 	character: { id: string; name: string; deleted: boolean; }
@@ -36,12 +36,7 @@ export const RestoreCharacterForm = ({
 		>
 			{
 				isPending
-				? <ClipLoader
-					loading={true}
-					color="#fff"
-					size={16}
-					aria-label="Loading Character Restoration"
-				/>
+				? <Spinner ariaLabel="Loading Character Restoration" />
 				: <FaRecycle aria-label="Restore Character" />
 			}
 		</button>

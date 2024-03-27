@@ -1,13 +1,14 @@
 'use client'
 import { createCharacter } from "@/app/actions"
-import { createRef, useEffect, useId, useState } from "react"
+import { useEffect, useId, useState, useTransition } from "react"
 import { CustomToast } from "@/app/custom-toast"
+import { Spinner } from "@/app/components/spinner"
 
 export const AddCharacterForm = () => {
 	const id = useId()
 	const [error, setError] = useState(false)
 	const [inputValue, setInputValue] = useState("")
-	const [isDisabled, setIsDisabled] = useState(false)
+	const [isPending, startTransition] = useTransition()
 
 	useEffect(() => {
 		setError(false)
@@ -17,22 +18,22 @@ export const AddCharacterForm = () => {
 		<form
 			className="flex flex-col gap-4"
 			action={async (formData: FormData) => {
-				const name = formData.get("name") as string | null
-				if (name) {
-					setIsDisabled(true)
-					const result = await createCharacter(name)
-
-					if (result.error) {
-						setError(true)
-						CustomToast(result.error, "error")
+				startTransition(async () => {
+					const name = formData.get("name") as string | null
+					if (name) {
+						const result = await createCharacter(name)
+	
+						if (result.error) {
+							setError(true)
+							CustomToast(result.error, "error")
+						}
+						if (result.success) {
+							setError(false)
+							setInputValue("")
+							CustomToast(result.success, "success")
+						}
 					}
-					if (result.success) {
-						setError(false)
-						setInputValue("")
-						CustomToast(result.success, "success")
-					}
-					setIsDisabled(false)
-				}
+				})
 			}}
 		>
 			<div className="flex flex-col">
@@ -49,10 +50,14 @@ export const AddCharacterForm = () => {
 						onChange={(e) => setInputValue(e.target.value)}
 					/>
 					<button
-						className="border rounded-e-lg px-2 hover:bg-slate-100/10"
-						disabled={isDisabled}
+						className="border rounded-e-lg px-2 hover:bg-slate-100/10 disabled:text-slate-100/35 w-[50px]"
+						disabled={isPending}
 					>
-						Add
+						{
+							isPending
+							? <Spinner ariaLabel="Loading character addition" />
+							: "Add"
+						}
 					</button>
 				</div>
 			</div>

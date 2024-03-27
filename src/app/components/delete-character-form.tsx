@@ -4,7 +4,7 @@ import { FaTrashCan } from "react-icons/fa6"
 import { softDeleteCharacter } from "@/app/actions"
 import { CustomToast } from "@/app/custom-toast"
 import { useTransition } from "react"
-import { ClipLoader } from "react-spinners"
+import { Spinner } from "@/app/components/spinner"
 
 interface DeleteCharacterFormProps {
 	character: { id: string; name: string; deleted: boolean; }
@@ -34,12 +34,7 @@ export const DeleteCharacterForm = ({
 		>
 			{
 				isPending
-				? <ClipLoader
-					loading={true}
-					color="#fff"
-					size={16}
-					aria-label="Loading Character Removal"
-				/>
+				? <Spinner ariaLabel="Loading Character Removal" />
 				: <FaTrashCan aria-label="Remove Character" />
 			}
 		</button>

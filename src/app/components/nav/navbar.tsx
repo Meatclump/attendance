@@ -1,7 +1,7 @@
 import { NavLink } from "./nav-link"
 import { currentUser } from "@clerk/nextjs"
 import { FaCalendar } from "react-icons/fa"
-import { FaPeopleGroup } from "react-icons/fa6"
+import { FaSliders } from "react-icons/fa6"
 
 export const Nav = async () => {
 	const user = await currentUser()
@@ -11,8 +11,8 @@ export const Nav = async () => {
 			{
 				user?.publicMetadata?.role === "admin" &&
 				<>
-					<NavLink path="/roster">
-						<FaPeopleGroup /> Roster
+					<NavLink path="/manage">
+						<FaSliders /> Manage
 					</NavLink>
 					<NavLink path="/events" >
 						<FaCalendar /> Events

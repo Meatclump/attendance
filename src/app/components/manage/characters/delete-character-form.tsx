@@ -5,9 +5,10 @@ import { softDeleteCharacter } from "@/app/actions"
 import { CustomToast } from "@/app/custom-toast"
 import { useTransition } from "react"
 import { Spinner } from "@/app/components/spinner"
+import type { Character } from "@prisma/client"
 
 interface DeleteCharacterFormProps {
-	character: { id: string; name: string; deleted: boolean; }
+	character: Character
 }
 
 export const DeleteCharacterForm = ({

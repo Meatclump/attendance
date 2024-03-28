@@ -5,9 +5,10 @@ import { CustomToast } from "@/app/custom-toast"
 import { useTransition } from "react"
 import { FaRecycle } from "react-icons/fa"
 import { Spinner } from "@/app/components/spinner"
+import type { Character } from "@prisma/client"
 
 interface RestoreCharacterFormProps {
-	character: { id: string; name: string; deleted: boolean; }
+	character: Character
 }
 
 export const RestoreCharacterForm = ({

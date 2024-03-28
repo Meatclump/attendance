@@ -10,7 +10,12 @@ import { revalidatePath } from "next/cache"
 export const getRoster = async () => {
 	try {
 		const roster = await prisma.character.findMany({
-			where: {deleted: false}
+			where: {
+				deleted: null
+			},
+			include: {
+				eventTypes: true
+			}
 		})
 		return roster
 	} catch (error) {
@@ -21,22 +26,96 @@ export const getRoster = async () => {
 export const getInactiveRoster = async () => {
 	try {
 		const roster = await prisma.character.findMany({
-			where: {deleted: true}
+			where: {
+				deleted: {
+					not: null
+				}
+			},
+			include: {
+				eventTypes: true
+			}
 		})
-		console.log("ROSTER:",roster)
 		return roster
 	} catch (error) {
 		return null
 	}
 }
 
+export const getEventTypes = async () => {
+	try {
+		const eventTypes = await prisma.eventType.findMany()
+		return eventTypes
+	} catch (error) {
+		return null
+	}
+}
+
+export const removeEventFromCharacter = async (characterId: string, typeId: string) => {
+	try {
+		const result = await prisma.character.update({
+			where: {id: characterId},
+			data: {
+				eventTypes: {
+					disconnect: { id: typeId }
+				}
+			},
+			include: {
+				eventTypes: true
+			}
+		})
+		revalidatePath("page")
+		return result
+	} catch (error) {
+		console.error(error)
+		return null
+	}
+}
+
+export const connectEventToCharacter = async (characterId: string, eventId: string) => {
+	try {
+		const result = await prisma.character.update({
+			where: {id: characterId},
+			data: {
+				eventTypes: {
+					connect: {
+						id: eventId
+					}
+				}
+			},
+			include: {
+				eventTypes: true
+			}
+		})
+		revalidatePath("page")
+		return result
+	} catch (error) {
+		return null
+	}
+}
+
+export const getCharacterEventTypes = async (characterId: string) => {
+	try {
+		const characterEventTypes = await prisma.character.findMany({
+			where: { id: characterId },
+			include: { eventTypes: true }
+		})
+		return characterEventTypes
+	} catch (error) {
+		return null
+	}
+}
+
+/**
+ * Soft Delete a character which can be restored again at a later date
+ */
 export const softDeleteCharacter = async (id: string) => {
 	try {
 		const result = await prisma.character.update({
-			where: {id},
-			data: { deleted: true }
+			where: { id },
+			data: {
+				deleted: new Date()
+			}
 		})
-		console.log(result)
 		revalidatePath("page")
 		return {
 			success: "Character soft deleted."
@@ -52,13 +131,15 @@ export const softDeleteCharacter = async (id: string) => {
 	}
 }
 
+/**
+ * Restore a character which has previously been marked as Deleted
+ */
 export const restoreCharacter = async (id: string) => {
 	try {
 		const result = await prisma.character.update({
-			where: {id},
-			data: { deleted: false }
+			where: { id },
+			data: { deleted: null }
 		})
-		console.log(result)
 		revalidatePath("page")
 		return {
 			success: "Character restored."
@@ -74,10 +155,10 @@ export const restoreCharacter = async (id: string) => {
 	}
 }
 
-export const deleteCharacter = async (id:string) => {
+export const deleteCharacter = async (id: string) => {
 	try {
 		const result = await prisma.character.delete({
-			where: {id}
+			where: { id }
 		})
 		revalidatePath("page")
 		return {
@@ -97,10 +178,10 @@ export const deleteCharacter = async (id:string) => {
 /**
  * Get a specific character from database by id
  */
-export const getCharacter = async (id:string) => {
+export const getCharacter = async (id: string) => {
 	try {
 		const char = await prisma.character.findUniqueOrThrow({
-			where: {id}
+			where: { id }
 		})
 		return char
 	} catch (error) {
@@ -117,7 +198,7 @@ export const getCharacter = async (id:string) => {
 /**
  * Create a new roster character in the database
  */
-export const createCharacter = async (name:string) => {
+export const createCharacter = async (name: string) => {
 	let validatedName = name.trim()
 
 	if (validatedName.length < 2) {
@@ -127,12 +208,11 @@ export const createCharacter = async (name:string) => {
 	}
 
 	validatedName = validatedName[0].toUpperCase() + validatedName.slice(1)
-	
+
 	try {
 		const createChar = await prisma.character.create({
 			data: {
-				name: validatedName,
-				deleted: false
+				name: validatedName
 			}
 		})
 		revalidatePath("page")

@@ -5,7 +5,11 @@ import { RemoveEventTypeFromCharacterForm } from "./remove-event-type-from-chara
 interface ParticipationCellProps {
 	character: Prisma.CharacterGetPayload<{
 		include: {
-			eventTypes: true
+			eventTypes: {
+				include: {
+					color: true
+				}
+			}
 		}
 	}>
 }
@@ -13,6 +17,7 @@ interface ParticipationCellProps {
 export const ParticipationCell = async ({
 	character
 }: ParticipationCellProps) => {
+	console.log("CHARACTER: ",character)
 	return (
 		<div className="flex gap-2">
 			{

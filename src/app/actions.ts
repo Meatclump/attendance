@@ -14,7 +14,11 @@ export const getRoster = async () => {
 				deleted: null
 			},
 			include: {
-				eventTypes: true
+				eventTypes: {
+					include: {
+						color: true
+					}
+				}
 			}
 		})
 		return roster
@@ -43,7 +47,9 @@ export const getInactiveRoster = async () => {
 
 export const getEventTypes = async () => {
 	try {
-		const eventTypes = await prisma.eventType.findMany()
+		const eventTypes = await prisma.eventType.findMany({
+			include: { color: true }
+		})
 		return eventTypes
 	} catch (error) {
 		return null

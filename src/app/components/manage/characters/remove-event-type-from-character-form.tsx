@@ -1,10 +1,14 @@
 'use client'
-import type { Character, EventType } from "@prisma/client"
+import type { Character, Prisma } from "@prisma/client"
 import { removeEventFromCharacter } from "@/app/actions"
 
 interface RemoveEventTypeFromCharacterFormProps {
 	character: Character
-	type: EventType
+	type: Prisma.EventTypeGetPayload<{
+		include: {
+			color: true
+		}
+	}>
 }
 
 export const RemoveEventTypeFromCharacterForm = ({
@@ -14,12 +18,11 @@ export const RemoveEventTypeFromCharacterForm = ({
 
 	const handleClick = async () => {
 		const result = await removeEventFromCharacter(character.id, type.id)
-		console.log("Final result:",result)
 	}
 
 	return (
 		<button
-			className={`bg-${type.color.toLocaleLowerCase()}-400 p-1 rounded-md text-zinc-900 text-sm`}
+			className={`${type.color.bgCSS} p-1 rounded-md text-zinc-900 text-sm`}
 			onClick={handleClick}
 		>
 			{type.name}

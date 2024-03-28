@@ -47,7 +47,7 @@ export const AddEventTypeToCharacterForm = ({
 			</button>
 			{
 				showMenu &&
-				<form className="absolute bottom-[-30px] text-slate-900 w-[200px]">
+				<form className="absolute bottom-[-30px] text-slate-900 w-[200px] z-10">
 					<select className="px-1 rounded-md w-full p-1 border" onChange={handleChange} defaultValue="">
 						<option
 							className="font-sans font-medium"

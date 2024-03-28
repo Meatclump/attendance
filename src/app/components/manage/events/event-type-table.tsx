@@ -1,8 +1,8 @@
 import { getEventTypes } from "@/app/actions"
+import { ColorSelectForm } from "./color-select-form"
 
 export const EventTypeTable = async () => {
 	const eventTypes = await getEventTypes()
-	console.log(eventTypes)
 	return (
 		<div className="w-full">
 			<table className="table-fixed w-full">
@@ -27,11 +27,7 @@ export const EventTypeTable = async () => {
 									{type.name}
 								</td>
 								<td className="px-4 py-1">
-									<select
-										className={`bg-${type.color.toLocaleLowerCase()}-400 text-slate-900 rounded-md w-full p-1`}
-									>
-										<option>{type.color}</option>
-									</select>
+									<ColorSelectForm currentColor={type.color.name} eventTypes={eventTypes} />
 								</td>
 							</tr>
 						))

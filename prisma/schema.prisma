@@ -14,42 +14,24 @@ datasource db {
 }
 
 model Character {
-    id      String  @id @default(uuid())
-    name    String  @unique
-    deleted DateTime?
-	eventTypes EventType[]
+    id         String      @id @default(uuid())
+    name       String      @unique
+    deleted    DateTime?
+    eventTypes EventType[]
 }
 
 model EventType {
-    id String @id @default(uuid())
-	name String @unique
-	color EventColor
-	participants Character[]
+    id           String      @id @default(uuid())
+    name         String      @unique
+    participants Character[]
+    color        EventColor  @relation(fields: [eventColorId], references: [id])
+    eventColorId String
 }
 
-enum EventColor {
-	BLACK
-	WHITE
-	SLATE
-	GRAY
-	ZINC
-	NEUTRAL
-	STONE
-	RED
-	ORANGE
-	AMBER
-	YELLOW
-	LIME
-	GREEN
-	EMERALD
-	TEAL
-	CYAN
-	SKY
-	BLUE
-	INDIGO
-	VIOLET
-	PURPLE
-	FUCHSIA
-	PINK
-	ROSE
+model EventColor {
+    id        String      @id @default(uuid())
+    name      String      @unique
+    textCSS   String      @unique
+    bgCSS     String      @unique
+    EventType EventType[]
 }

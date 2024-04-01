@@ -5,14 +5,15 @@ import { CardContent } from "@/app/components/card/card-content"
 
 export const EventTypePanel = () => {
 	return (
-
-		<CardWrapper>
-			<CardHeader>
-				<h2 className="py-1">Event Types</h2>
-			</CardHeader>
-			<CardContent>
-				<EventTypeTable />
-			</CardContent>
-		</CardWrapper>
+		<div className="flex max-w-[400px]">
+			<CardWrapper>
+				<CardHeader>
+					<h2 className="py-1">Event Types</h2>
+				</CardHeader>
+				<CardContent>
+					<EventTypeTable />
+				</CardContent>
+			</CardWrapper>
+		</div>
 	)
 }

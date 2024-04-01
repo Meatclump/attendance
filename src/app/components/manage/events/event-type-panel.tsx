@@ -1,9 +1,18 @@
 import { EventTypeTable } from "@/app/components/manage/events/event-type-table"
+import { CardWrapper } from "@/app/components/card/card-wrapper"
+import { CardHeader } from "@/app/components/card/card-header"
+import { CardContent } from "@/app/components/card/card-content"
 
 export const EventTypePanel = () => {
 	return (
-		<div className="border-t border-t-slate-100/20 pt-4 overflow-y-scroll">
-			<EventTypeTable />
-		</div>
+
+		<CardWrapper>
+			<CardHeader>
+				<h2 className="py-1">Event Types</h2>
+			</CardHeader>
+			<CardContent>
+				<EventTypeTable />
+			</CardContent>
+		</CardWrapper>
 	)
 }

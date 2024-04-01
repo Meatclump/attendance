@@ -19,7 +19,7 @@ export const EventTypeTable = async () => {
 				</thead>
 				<tbody>
 					{
-						eventTypes && eventColors && eventTypes.map(type => (
+						eventTypes && eventColors && eventTypes.sort((a, b) => a.name.localeCompare(b.name)).map(type => (
 							<tr
 								key={type.id}
 								className="odd:bg-slate-100/10 hover:bg-orange-100/20"

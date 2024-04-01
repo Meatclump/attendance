@@ -4,11 +4,7 @@ const prisma = new PrismaClient()
 // TODO - Create "style" attributes "#fff" out of all the colors
 async function main() {
 	const eventColors = [
-		"slate",
 		"gray",
-		"zinc",
-		"neutral",
-		"stone",
 		"red",
 		"orange",
 		"amber",

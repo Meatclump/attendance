@@ -6,7 +6,13 @@ import { CardFooter } from "@/app/components/card/card-footer"
 import { AddEventTypeForm } from "./add-event-type-form"
 import { EventTab } from "./event-tab"
 
-export const EventTypePanel = () => {
+interface EventTypePanelProps {
+	showInactive: boolean
+}
+
+export const EventTypePanel = ({
+	showInactive
+}: EventTypePanelProps) => {
 	return (
 		<div className="flex max-w-[400px]">
 			<CardWrapper>
@@ -15,7 +21,7 @@ export const EventTypePanel = () => {
 					<EventTab />
 				</CardHeader>
 				<CardContent>
-					<EventTypeTable />
+					<EventTypeTable showInactive={showInactive} />
 				</CardContent>
 				<CardFooter>
 					<AddEventTypeForm />

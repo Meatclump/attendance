@@ -12,7 +12,7 @@ interface RosterTableProps {
 export const RosterTable = async ({
 	inactive
 }: RosterTableProps) => {
-	console.log(inactive)
+	
 	const roster = inactive
 		? await getInactiveRoster()
 		: await getRoster()

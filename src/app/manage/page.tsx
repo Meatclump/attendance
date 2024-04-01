@@ -9,10 +9,11 @@ const RosterPage = ({
 	searchParams
 }: RosterPageProps) => {
 	const rosterActiveTab = searchParams?.rosterTab === 'inactive'
+	const eventActiveTab = searchParams?.eventTab === 'inactive'
 	return (
 		<>
 			<CharacterRosterPanel showInactive={rosterActiveTab} />
-			<EventTypePanel />
+			<EventTypePanel showInactive={eventActiveTab} />
 		</>
 	)
 }

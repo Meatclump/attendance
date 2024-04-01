@@ -1,9 +1,23 @@
-import { getEventColors, getEventTypes } from "@/app/actions"
-import { ColorSelectForm } from "./color-select-form"
 
-export const EventTypeTable = async () => {
-	const eventTypes = await getEventTypes()
+
+import { getEventColors, getEventTypes, getInactiveEventTypes } from "@/app/actions"
+import { ColorSelectForm } from "./color-select-form"
+import { RestoreEventTypeForm } from "./restore-event-type-form"
+import { RemoveEventTypeForm } from "./remove-event-type-form"
+
+interface EventTypeTableProps {
+	showInactive: boolean
+}
+
+export const EventTypeTable = async ({
+	showInactive
+}: EventTypeTableProps) => {
+	const eventTypes = showInactive
+		? await getInactiveEventTypes()
+		: await getEventTypes()
+
 	const eventColors = await getEventColors()
+
 	return (
 		<div className="w-full">
 			<table className="table-fixed w-full">
@@ -14,6 +28,13 @@ export const EventTypeTable = async () => {
 						</th>
 						<th className="text-start px-4 w-[150px]">
 							Color
+						</th>
+						<th className="px-4 text-center w-[150px]">
+							{
+								showInactive
+									? (<>Reactivate</>)
+									: (<>Remove</>)
+							}
 						</th>
 					</tr>
 				</thead>
@@ -29,6 +50,15 @@ export const EventTypeTable = async () => {
 								</td>
 								<td className="px-4 py-1">
 									<ColorSelectForm currentEvent={type} eventColors={eventColors} />
+								</td>
+								<td>
+									<div className="flex items-center justify-center">
+										{
+											showInactive
+												? <RestoreEventTypeForm eventType={type} />
+												: <RemoveEventTypeForm eventType={type} />
+										}
+									</div>
 								</td>
 							</tr>
 						))

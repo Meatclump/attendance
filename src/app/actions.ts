@@ -17,16 +17,89 @@ export const getEventColors = async () => {
 }
 
 /**
- * Get all Event Types
+ * Get active Event Types
  */
 export const getEventTypes = async () => {
 	try {
 		const eventTypes = await prisma.eventType.findMany({
+			where: {
+				deleted: null
+			},
 			include: { color: true }
 		})
 		return eventTypes
 	} catch (error) {
 		return null
+	}
+}
+
+/**
+ * Get inactive Event Types
+ */
+export const getInactiveEventTypes = async () => {
+	try {
+		const eventTypes = await prisma.eventType.findMany({
+			where: {
+				deleted: {
+					not: null
+				}
+			},
+			include: { color: true }
+		})
+		return eventTypes
+	} catch (error) {
+		return null
+	}
+}
+
+
+/**
+ * Soft Delete an Event Type which can be restored again at a later date
+ */
+export const softDeleteEventType = async (id: string) => {
+	try {
+		const result = await prisma.eventType.update({
+			where: { id },
+			data: {
+				deleted: new Date()
+			}
+		})
+		revalidatePath("page")
+		return {
+			success: "Event Type soft deleted."
+		}
+	} catch (error) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			if (error.code === "P2025") {
+				return {
+					error: "Event Type Not Found!"
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Restore an Event Type which has previously been marked as Deleted
+ */
+export const restoreEventType = async (id: string) => {
+	try {
+		const result = await prisma.eventType.update({
+			where: { id },
+			data: { deleted: null }
+		})
+		revalidatePath("page")
+		return {
+			success: "Event Type restored."
+		}
+	} catch (error) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			if (error.code === "P2025") {
+				return {
+					error: "Event Type Not Found!"
+				}
+			}
+		}
 	}
 }
 

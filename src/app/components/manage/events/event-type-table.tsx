@@ -28,7 +28,7 @@ export const EventTypeTable = async () => {
 									{type.name}
 								</td>
 								<td className="px-4 py-1">
-									<ColorSelectForm currentColor={type.color} eventColors={eventColors} />
+									<ColorSelectForm currentEvent={type} eventColors={eventColors} />
 								</td>
 							</tr>
 						))

@@ -1,26 +1,32 @@
 'use client'
 
-import { EventColor, Prisma } from "@prisma/client"
+import { setEventTypeColor } from "@/app/actions"
+import { EventColor, EventType, Prisma } from "@prisma/client"
+import { ChangeEvent } from "react"
 
 interface ColorSelectFormProps {
-	currentColor: EventColor
+	currentEvent: Prisma.EventTypeGetPayload<{
+		include: {
+			color: true
+		}
+	}>
 	eventColors: EventColor[]
 }
 
 export const ColorSelectForm = ({
-	currentColor,
+	currentEvent,
 	eventColors
 }: ColorSelectFormProps) => {
-	const handleChange = () => {
-
+	const handleChange = async (e: ChangeEvent<HTMLSelectElement>) => {
+		setEventTypeColor(currentEvent.id, e.target.value)
 	}
 
 	return (
 		<div className="">
 			<select
-				className={`text-slate-900 rounded-md w-full p-1 ${currentColor.bgCSS}`}
+				className={`text-slate-900 rounded-md w-full p-1 ${currentEvent.color.bgCSS}`}
 				onChange={handleChange}
-				defaultValue={currentColor.id}
+				defaultValue={currentEvent.color.id}
 			>
 				{
 					eventColors &&

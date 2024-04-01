@@ -58,6 +58,24 @@ export const getEventColors = async () => {
 	}
 }
 
+export const setEventTypeColor = async (eventId: string, colorId: string) => {
+	try {
+		const eventColors = await getEventColors()
+		if (eventColors?.find(entry => entry.id === colorId)) {
+			const updatedEvent = await prisma.eventType.update({
+				where: {id: eventId},
+				data: {
+					eventColorId: colorId
+				}
+			})
+			revalidatePath("page")
+			return updatedEvent
+		}
+	} catch (error) {
+		return null	
+	}
+}
+
 export const getEventTypes = async () => {
 	try {
 		const eventTypes = await prisma.eventType.findMany({

@@ -1,8 +1,9 @@
-import { getEventTypes } from "@/app/actions"
+import { getEventColors, getEventTypes } from "@/app/actions"
 import { ColorSelectForm } from "./color-select-form"
 
 export const EventTypeTable = async () => {
 	const eventTypes = await getEventTypes()
+	const eventColors = await getEventColors()
 	return (
 		<div className="w-full">
 			<table className="table-fixed w-full">
@@ -18,7 +19,7 @@ export const EventTypeTable = async () => {
 				</thead>
 				<tbody>
 					{
-						eventTypes && eventTypes.map(type => (
+						eventTypes && eventColors && eventTypes.map(type => (
 							<tr
 								key={type.id}
 								className="odd:bg-slate-100/10 hover:bg-orange-100/20"
@@ -27,7 +28,7 @@ export const EventTypeTable = async () => {
 									{type.name}
 								</td>
 								<td className="px-4 py-1">
-									<ColorSelectForm currentColor={type.color.name} eventTypes={eventTypes} />
+									<ColorSelectForm currentColor={type.color} eventColors={eventColors} />
 								</td>
 							</tr>
 						))

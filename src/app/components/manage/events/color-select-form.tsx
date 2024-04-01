@@ -1,19 +1,15 @@
 'use client'
 
-import { Prisma } from "@prisma/client"
+import { EventColor, Prisma } from "@prisma/client"
 
 interface ColorSelectFormProps {
-	currentColor: string
-	eventTypes: Prisma.EventTypeGetPayload<{
-		include: {
-			color: true
-		}
-	}>[]
+	currentColor: EventColor
+	eventColors: EventColor[]
 }
 
 export const ColorSelectForm = ({
 	currentColor,
-	eventTypes
+	eventColors
 }: ColorSelectFormProps) => {
 	const handleChange = () => {
 
@@ -22,19 +18,19 @@ export const ColorSelectForm = ({
 	return (
 		<div className="">
 			<select
-				className={`text-slate-900 rounded-md w-full p-1`}
+				className={`text-slate-900 rounded-md w-full p-1 ${currentColor.bgCSS}`}
 				onChange={handleChange}
-				defaultValue={currentColor}
+				defaultValue={currentColor.id}
 			>
 				{
-					eventTypes &&
-					eventTypes.map(type => (
+					eventColors &&
+					eventColors.map(color => (
 						<option
-							key={type.color.id}
-							value={type.color.id}
-							className={`${type.color.bgCSS}`}
+							key={color.id}
+							value={color.id}
+							className={`${color.bgCSS} font-sans`}
 						>
-							{type.color.name}
+							{color.name}
 						</option>
 					))
 				}

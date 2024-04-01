@@ -2,6 +2,8 @@ import { EventTypeTable } from "@/app/components/manage/events/event-type-table"
 import { CardWrapper } from "@/app/components/card/card-wrapper"
 import { CardHeader } from "@/app/components/card/card-header"
 import { CardContent } from "@/app/components/card/card-content"
+import { CardFooter } from "@/app/components/card/card-footer"
+import { AddEventTypeForm } from "./add-event-type-form"
 
 export const EventTypePanel = () => {
 	return (
@@ -13,6 +15,9 @@ export const EventTypePanel = () => {
 				<CardContent>
 					<EventTypeTable />
 				</CardContent>
+				<CardFooter>
+					<AddEventTypeForm />
+				</CardFooter>
 			</CardWrapper>
 		</div>
 	)

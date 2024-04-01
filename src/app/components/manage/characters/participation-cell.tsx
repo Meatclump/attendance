@@ -1,6 +1,7 @@
 import type { Prisma } from "@prisma/client"
 import { AddEventTypeToCharacterForm } from "./add-event-type-to-character-form"
 import { RemoveEventTypeFromCharacterForm } from "./remove-event-type-from-character-form"
+import { getEventTypes } from "@/app/actions"
 
 interface ParticipationCellProps {
 	character: Prisma.CharacterGetPayload<{
@@ -17,15 +18,18 @@ interface ParticipationCellProps {
 export const ParticipationCell = async ({
 	character
 }: ParticipationCellProps) => {
-	
+	const eventTypes = await getEventTypes()
 	return (
-		<div className="flex gap-2">
+		<div>
 			{
 				character.eventTypes.map(type => 
 					<RemoveEventTypeFromCharacterForm type={type} character={character} key={type.id} />
 				)
 			}
-			<AddEventTypeToCharacterForm character={character} />
+			{
+				eventTypes &&
+				<AddEventTypeToCharacterForm character={character} eventTypes={eventTypes} />
+			}
 		</div>
 	)
 }

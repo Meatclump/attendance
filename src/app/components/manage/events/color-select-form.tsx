@@ -1,7 +1,7 @@
 'use client'
 
 import { setEventTypeColor } from "@/app/actions"
-import { EventColor, EventType, Prisma } from "@prisma/client"
+import { EventColor, Prisma } from "@prisma/client"
 import { ChangeEvent } from "react"
 
 interface ColorSelectFormProps {

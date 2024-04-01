@@ -17,7 +17,7 @@ interface ParticipationCellProps {
 export const ParticipationCell = async ({
 	character
 }: ParticipationCellProps) => {
-	console.log("CHARACTER: ",character)
+	
 	return (
 		<div className="flex gap-2">
 			{

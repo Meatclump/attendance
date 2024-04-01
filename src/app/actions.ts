@@ -5,6 +5,109 @@ import { Prisma } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 
 /**
+ * Get all possible colors for events
+ */
+export const getEventColors = async () => {
+	try {
+		const eventColors = await prisma.eventColor.findMany()
+		return eventColors
+	} catch (error) {
+		return null
+	}
+}
+
+/**
+ * Get all Event Types
+ */
+export const getEventTypes = async () => {
+	try {
+		const eventTypes = await prisma.eventType.findMany({
+			include: { color: true }
+		})
+		return eventTypes
+	} catch (error) {
+		return null
+	}
+}
+
+/**
+ * Create a new Event Type with specified name
+ */
+export const createEventType = async (name: string) => {
+	let validatedName = name.trim()
+
+	if (validatedName.length < 2) {
+		return {
+			error: "Event Type name must be at least 2 characters."
+		}
+	}
+
+	validatedName = validatedName[0].toUpperCase() + validatedName.slice(1)
+	
+	try {
+		const eventColors = await getEventColors()
+		if (eventColors) {
+			const createEvtType = await prisma.eventType.create({
+				data: {
+					name: validatedName,
+					eventColorId: eventColors[0].id
+				}
+			})
+			revalidatePath("page")
+			return {
+				success: `Successfully created Event Type: ${createEvtType.name}`
+			}
+		} else {
+			return {
+				error: "Unable to retreive event colors."
+			}
+		}
+	} catch (error) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			if (error.code === 'P2002') {
+				revalidatePath("page")
+				return { error: "Event Type name must be unique. If no such Event Type is present, check the Inactive list." }
+			}
+		}
+		revalidatePath("page")
+		return { error: "Something went wrong!" }
+	}
+}
+
+/**
+ * Set a color for a specified event type
+ */
+export const setEventTypeColor = async (eventId: string, colorId: string) => {
+	try {
+		const eventColors = await getEventColors()
+		if (eventColors) {
+			if (eventColors.find(entry => entry.id === colorId)) {
+				const updatedEvent = await prisma.eventType.update({
+					where: {id: eventId},
+					data: {
+						eventColorId: colorId
+					}
+				})
+				revalidatePath("page")
+				return updatedEvent
+			} else {
+				return {
+					error: "Given color id not found in available color table."
+				}
+			}
+		} else {
+			return {
+				error: "Unable to retreive event colors."
+			}
+		}
+	} catch (error) {
+		return {
+			error: "Something went wrong!"
+		}
+	}
+}
+
+/**
  * Get all active roster characters in database
  */
 export const getRoster = async () => {
@@ -49,67 +152,6 @@ export const getInactiveRoster = async () => {
 		return roster
 	} catch (error) {
 		return null
-	}
-}
-
-/**
- * Get all possible colors for events
- */
-export const getEventColors = async () => {
-	try {
-		const eventColors = await prisma.eventColor.findMany()
-		return eventColors
-	} catch (error) {
-		return null
-	}
-}
-
-/**
- * Set a color for a specified event type
- */
-export const setEventTypeColor = async (eventId: string, colorId: string) => {
-	try {
-		const eventColors = await getEventColors()
-		if (eventColors) {
-			if (eventColors.find(entry => entry.id === colorId)) {
-				const updatedEvent = await prisma.eventType.update({
-					where: {id: eventId},
-					data: {
-						eventColorId: colorId
-					}
-				})
-				revalidatePath("page")
-				return updatedEvent
-			} else {
-				return {
-					error: "Given color id not found in available color table."
-				}
-			}
-		} else {
-			return {
-				error: "Unable to retreive event colors."
-			}
-		}
-	} catch (error) {
-		return {
-			error: "Something went wrong!"
-		}
-	}
-}
-
-/**
- * Get all Event Types
- */
-export const getEventTypes = async () => {
-	try {
-		const eventTypes = await prisma.eventType.findMany({
-			include: { color: true }
-		})
-		return eventTypes
-	} catch (error) {
-		return {
-			error: "Unable to retreive Event Types."
-		}
 	}
 }
 
@@ -267,50 +309,6 @@ export const getCharacter = async (id: string) => {
 				}
 			}
 		}
-	}
-}
-
-/**
- * Create a new Event Type with specified name
- */
-export const createEventType = async (name: string) => {
-	let validatedName = name.trim()
-
-	if (validatedName.length < 2) {
-		return {
-			error: "Event Type name must be at least 2 characters."
-		}
-	}
-
-	validatedName = validatedName[0].toUpperCase() + validatedName.slice(1)
-	
-	try {
-		const eventColors = await getEventColors()
-		if (eventColors) {
-			const createEvtType = await prisma.eventType.create({
-				data: {
-					name: validatedName,
-					eventColorId: eventColors[0].id
-				}
-			})
-			revalidatePath("page")
-			return {
-				success: `Successfully created Event Type: ${createEvtType.name}`
-			}
-		} else {
-			return {
-				error: "Unable to retreive event colors."
-			}
-		}
-	} catch (error) {
-		if (error instanceof Prisma.PrismaClientKnownRequestError) {
-			if (error.code === 'P2002') {
-				revalidatePath("page")
-				return { error: "Event Type name must be unique. If no such Event Type is present, check the Inactive list." }
-			}
-		}
-		revalidatePath("page")
-		return { error: "Something went wrong!" }
 	}
 }
 

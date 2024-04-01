@@ -4,6 +4,7 @@ import { CardHeader } from "@/app/components/card/card-header"
 import { CardContent } from "@/app/components/card/card-content"
 import { CardFooter } from "@/app/components/card/card-footer"
 import { AddEventTypeForm } from "./add-event-type-form"
+import { EventTab } from "./event-tab"
 
 export const EventTypePanel = () => {
 	return (
@@ -11,6 +12,7 @@ export const EventTypePanel = () => {
 			<CardWrapper>
 				<CardHeader>
 					<h2 className="py-1">Event Types</h2>
+					<EventTab />
 				</CardHeader>
 				<CardContent>
 					<EventTypeTable />

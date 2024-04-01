@@ -23,6 +23,7 @@ model Character {
 model EventType {
     id           String      @id @default(uuid())
     name         String      @unique
+    deleted      DateTime?
     participants Character[]
     color        EventColor  @relation(fields: [eventColorId], references: [id])
     eventColorId String

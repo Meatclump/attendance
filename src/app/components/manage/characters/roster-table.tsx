@@ -1,5 +1,5 @@
 import { getInactiveRoster, getRoster } from "@/app/actions"
-import { DeleteCharacterForm } from "@/app/components/manage/characters/delete-character-form"
+import { RemoveCharacterForm } from "@/app/components/manage/characters/remove-character-form"
 import { RestoreCharacterForm } from "@/app/components/manage/characters/restore-character-form"
 import { ParticipationCell } from "@/app/components/manage/characters/participation-cell"
 import { Suspense } from "react"
@@ -12,6 +12,7 @@ interface RosterTableProps {
 export const RosterTable = async ({
 	inactive
 }: RosterTableProps) => {
+	console.log(inactive)
 	const roster = inactive
 		? await getInactiveRoster()
 		: await getRoster()
@@ -55,7 +56,7 @@ export const RosterTable = async ({
 										{
 											inactive
 												? <RestoreCharacterForm character={character} />
-												: <DeleteCharacterForm character={character} />
+												: <RemoveCharacterForm character={character} />
 										}
 									</div>
 								</td>

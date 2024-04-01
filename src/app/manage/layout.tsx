@@ -1,7 +1,5 @@
 'use client'
 
-import { useSearchParams } from "next/navigation"
-
 interface RosterLayoutProps {
 	children: React.ReactNode
 }

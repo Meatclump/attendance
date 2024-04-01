@@ -8,11 +8,10 @@ interface RosterPageProps {
 const RosterPage = ({
 	searchParams
 }: RosterPageProps) => {
-	const params = searchParams
-	const showInactive = params.tab === "inactive"
+	const rosterActiveTab = searchParams?.rosterTab === 'inactive'
 	return (
 		<>
-			<CharacterRosterPanel showInactive={showInactive} />
+			<CharacterRosterPanel showInactive={rosterActiveTab} />
 			<EventTypePanel />
 		</>
 	)

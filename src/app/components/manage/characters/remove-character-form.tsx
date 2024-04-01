@@ -7,19 +7,19 @@ import { useTransition } from "react"
 import { Spinner } from "@/app/components/spinner"
 import type { Character } from "@prisma/client"
 
-interface DeleteCharacterFormProps {
+interface RemoveCharacterFormProps {
 	character: Character
 }
 
-export const DeleteCharacterForm = ({
+export const RemoveCharacterForm = ({
 	character
-}: DeleteCharacterFormProps) => {
+}: RemoveCharacterFormProps) => {
 	const [isPending, startTransition] = useTransition()
 
 	const handleSubmit = async () => {
 		const result = await softDeleteCharacter(character.id)
 		if (result?.success) {
-			CustomToast(`Character "${character.name}" deleted from roster.`, "success")
+			CustomToast(`Character "${character.name}" removed from roster.`, "success")
 		}
 	}
 

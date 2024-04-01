@@ -17,52 +17,52 @@ export const RosterTable = async ({
 		: await getRoster()
 
 	return (
-		<table className="table-fixed w-full">
-			<thead>
-				<tr>
-					<th className="px-4 text-start w-[200px]">
-						Character
-					</th>
-					<th className="px-4 text-start">
-						Participates In
-					</th>
-					<th className="px-4 text-center w-[150px]">
-						{
-							inactive
-							? (<>Reactivate</>)
-							: (<>Remove</>)
-						}
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				{
-					roster?.map(character => (
-						<tr key={character.id} className="odd:bg-slate-100/10 hover:bg-orange-100/20">
-							<td className="px-4 align-middle">
-								{character.name}
-							</td>
-							<td className="px-4 py-1 space-x-4">
-								{
-									character &&
-									<Suspense fallback={<Spinner ariaLabel="Loading participation tags" />}>
-										<ParticipationCell character={character} />
-									</Suspense>
-								}
-							</td>
-							<td>
-								<div className="flex items-center justify-center">
+			<table className="table-fixed w-full">
+				<thead>
+					<tr>
+						<th className="px-4 text-start w-[200px]">
+							Character
+						</th>
+						<th className="px-4 text-start">
+							Participates In
+						</th>
+						<th className="px-4 text-center w-[150px]">
+							{
+								inactive
+									? (<>Reactivate</>)
+									: (<>Remove</>)
+							}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						roster?.map(character => (
+							<tr key={character.id} className="odd:bg-slate-100/10 hover:bg-orange-100/20">
+								<td className="px-4 align-middle">
+									{character.name}
+								</td>
+								<td className="px-4 py-1 space-x-4">
 									{
-										inactive
-										? <RestoreCharacterForm character={character} />
-										: <DeleteCharacterForm character={character} />
+										character &&
+										<Suspense fallback={<Spinner ariaLabel="Loading participation tags" />}>
+											<ParticipationCell character={character} />
+										</Suspense>
 									}
-								</div>
-							</td>
-						</tr>
-					))
-				}
-			</tbody>
-		</table>
+								</td>
+								<td>
+									<div className="flex items-center justify-center">
+										{
+											inactive
+												? <RestoreCharacterForm character={character} />
+												: <DeleteCharacterForm character={character} />
+										}
+									</div>
+								</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
 	)
 }

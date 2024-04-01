@@ -33,7 +33,7 @@ export const RestoreCharacterForm = ({
 				})
 			}}
 			disabled={isPending}
-			className="text-green-400 disabled:text-green-400/10 text-2xl"
+			className="text-green-950 bg-green-600 rounded-md p-2 disabled:text-green-400/10 text-sm"
 		>
 			{
 				isPending

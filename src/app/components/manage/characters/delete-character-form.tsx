@@ -1,6 +1,6 @@
 'use client'
 
-import { FaTrashCan } from "react-icons/fa6"
+import { FaCircleMinus, FaMinus, FaSquareMinus, FaTrash, FaTrashCan } from "react-icons/fa6"
 import { softDeleteCharacter } from "@/app/actions"
 import { CustomToast } from "@/app/custom-toast"
 import { useTransition } from "react"
@@ -31,12 +31,12 @@ export const DeleteCharacterForm = ({
 					handleSubmit()
 				})
 			}}
-			className="text-2xl text-red-400 disabled:text-red-400/10"
+			className="text-sm text-red-950 bg-red-600 p-2 rounded-md disabled:text-red-400/10"
 		>
 			{
 				isPending
 				? <Spinner ariaLabel="Loading Character Removal" />
-				: <FaTrashCan aria-label="Remove Character" />
+				: <FaMinus aria-label="Remove Character" />
 			}
 		</button>
 	)

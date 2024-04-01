@@ -36,10 +36,23 @@ export const getInactiveRoster = async () => {
 				}
 			},
 			include: {
-				eventTypes: true
+				eventTypes: {
+					include: {
+						color: true
+					}
+				}
 			}
 		})
 		return roster
+	} catch (error) {
+		return null
+	}
+}
+
+export const getEventColors = async () => {
+	try {
+		const eventColors = await prisma.eventColor.findMany()
+		return eventColors
 	} catch (error) {
 		return null
 	}

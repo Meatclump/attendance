@@ -15,7 +15,7 @@ export const CharacterRosterPanel = ({
 	showInactive
 }: RosterPageProps) => {
 	return (
-		<div className="flex max-w-[600px]">
+		<div className="flex">
 			<CardWrapper>
 				<CardHeader>
 					<h2 className="flex-1 py-1">

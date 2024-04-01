@@ -22,7 +22,7 @@ export const RemoveEventTypeFromCharacterForm = ({
 
 	return (
 		<button
-			className={`${type.color.bgCSS} p-1 ms-1 mt-1 rounded-md text-zinc-900 text-sm`}
+			className={`${type.color.bgCSS} ${type.deleted && 'opacity-25'} p-1 ms-1 mt-1 rounded-md text-zinc-900 text-sm`}
 			onClick={handleClick}
 		>
 			{type.name}

@@ -1,6 +1,6 @@
 'use client'
 
-import { FaCircleMinus, FaMinus, FaSquareMinus, FaTrash, FaTrashCan } from "react-icons/fa6"
+import { FaMinus } from "react-icons/fa6"
 import { softDeleteCharacter } from "@/app/actions"
 import { CustomToast } from "@/app/custom-toast"
 import { useTransition } from "react"
